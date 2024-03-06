@@ -38,9 +38,17 @@ internal class Program
         carsAfter1990.ForEach(c => Console.WriteLine($"Car name: {c.Name}, Year: {c.Year}"));
         
         // 2c
-        var carsByManufacturer = cars.GroupBy(c => c.Manufacturer).ToList();
+        var carsByManufacturer = cars
+            .GroupBy(c => c.Manufacturer)
+            .Select(g => new
+            {
+                Manufacturer = g.Key,
+                Count = g.Count(),
+                TotalPrice = g.Sum(c => c.Price)
+            })
+            .ToList();
         Console.WriteLine("2c - Car by manufacturer:");
-        carsByManufacturer.ForEach(c => Console.WriteLine($"Manufacturer: {c.Key}, Count: {c.Count()}"));
+        carsByManufacturer.ForEach(c => Console.WriteLine($"Manufacturer: {c.Manufacturer}, Count: {c.Count}, Total Price: {c.TotalPrice}"));
         
         // 3a
         var sortedTrucksDesc = trucks.OrderByDescending(t => t.Year).ToList();
@@ -49,6 +57,6 @@ internal class Program
         
         // 3b
         Console.WriteLine($"3b - Truck Comapny name");
-        trucks.ForEach(t => Console.WriteLine($"Truck company: t.Company"));
+        trucks.ForEach(t => Console.WriteLine($"Truck company: {t.Company}"));
     }
 }
